@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:myproject/anasayfa.dart';
 import 'package:myproject/p2.dart';
 import 'package:myproject/p2.detay.dart';
+import 'package:myproject/verify.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +13,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: Sayfa2Detay());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Anasayfam(),
+    );
   }
 }
 
