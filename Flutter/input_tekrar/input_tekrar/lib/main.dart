@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +27,7 @@ class MyProject extends StatelessWidget {
           foregroundColor: Colors.white,
         ),
       ),
-      body: TextFieldWidgetKullanimi(),
+      body: TextFormFieldKullanimi(),
     );
   }
 }
@@ -116,6 +117,158 @@ class _TextFieldWidgetKullanimiState extends State<TextFieldWidgetKullanimi> {
   }
 }
 
+class TextFormFieldKullanimi extends StatefulWidget {
+  const TextFormFieldKullanimi({super.key});
+
+  @override
+  State<TextFormFieldKullanimi> createState() => _TextFormFieldKullanimiState();
+}
+
+class _TextFormFieldKullanimiState extends State<TextFormFieldKullanimi> {
+  //başka bi yerden ulaşmak istemediğimiz için _ böyle private
+  late final String _email, _password, _userName;
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child: Form(
+          key: _formKey,
+          //validate işlemini ne zaman çalıştıracağını belirler
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+
+          child: Column(
+            children: [
+              //Texteditingcontroller'a ihtiyaç duymazz. çünkü onsaved vardır.
+              TextFormField(
+                onSaved: (gelenUserName) {
+                  _userName = gelenUserName!;
+                },
+                //varsayılan değeri tanımlar
+                //initialValue: "nergizalici",
+                decoration: InputDecoration(
+                  //hata mesajlarının rengini değiştirir.
+                  errorStyle: TextStyle(color: Colors.red),
+                  labelText: "Kullanıcı Adı",
+                  hintText: "Username",
+                  border: OutlineInputBorder(),
+                ),
+
+                validator: (girilenUserName) {
+                  if (girilenUserName!.isEmpty) {
+                    return "Kullanıcı adı boş olamaz";
+                  }
+
+                  if (girilenUserName!.length < 4) {
+                    return "4 karakterden az olamaz";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                onSaved: (gelenMail) {
+                  _email = gelenMail!;
+                },
+                //varsayılan değeri tanımlar
+                //initialValue: "nergizalici",
+                decoration: InputDecoration(
+                  //hata mesajlarının rengini değiştirir.
+                  errorStyle: TextStyle(color: Colors.red),
+                  labelText: "Email",
+                  hintText: "Email",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (girilenEmail) {
+                  if (!EmailValidator.validate(girilenEmail!)) {
+                    return "Geçerli bir e-mail giriniz";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                onSaved: (girilenSifre) {
+                  _password = girilenSifre!;
+                },
+                //varsayılan değeri tanımlar
+                //initialValue: "nergizalici",
+                decoration: InputDecoration(
+                  //hata mesajlarının rengini değiştirir.
+                  errorStyle: TextStyle(color: Colors.red),
+                  labelText: "Şifre",
+                  hintText: "Password",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (girilenPass) {
+                  if (girilenPass!.length < 4) {
+                    return "Şifre en az 5 karakter olmalı";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+
+              SizedBox(height: 10),
+
+              SizedBox(
+                width: 180,
+                height: 55,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green.shade300,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color: Colors.green, width: 3),
+                    ),
+                  ),
+
+                  onPressed: () {
+                    //validate tamamlandı mı kontrol etmek için
+                    bool _isValidate = _formKey.currentState!.validate();
+                    if (_isValidate) {
+                      //textformfielddan gelen verileri kydetme işlemi
+                      _formKey.currentState!.save();
+                      String result =
+                          "username: $_userName\nemail: $_email\nşifre:$_password ";
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.pink,
+                          content: Text(
+                            result,
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                      );
+                      //save işlemi olduktan sonra textformfieldları temizler
+                      _formKey.currentState!.reset();
+                    }
+                  },
+                  child: Text("Onayla"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+//validate  üçşekilde 
+// 1- yazar yazar ondan sonra/butona tıklandığında 2- kullanıcı textfromfielde tıkladığında  3- bu da hatalı/her zaman sayfaya girdiğinde her yer kırmızı
+
+
+
+
+
+
 //tek bir birim varsa tekfield kullanılır. çoklu alan varsa textformfiel kullanılır.
 //controllerlar her zaman arka tarafta birikir 
 //global key de bir controllerdır
@@ -126,3 +279,10 @@ class _TextFieldWidgetKullanimiState extends State<TextFieldWidgetKullanimi> {
 // TextEditingController içine varsayılan olarak text parametresi alması işimiz kolaylaştırır
 //texfield stateful widgettan türer.
 //nodefocuseda dispose edilir.sayfa değiştikten sonra ortadan kaldırılır.
+
+
+
+
+//yarın için
+// 1) sayfaların ekran fotoları
+//2) ekran kaydı sesli anlatım
