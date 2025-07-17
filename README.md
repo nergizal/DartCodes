@@ -19,4 +19,4 @@ setState, TextField, ElevatedButton gibi temel widget'lar ile oluşturulmuş say
 -Yemek tarifi uygulaması
 -Burç yorumu uygulaması
 -Pizza sipariş ekranı
--Instagram benzeri yatay/dikey scroll içeren UI mockup
+-Instagram benzeri yatay/dikey scroll içeren UI mockup.
